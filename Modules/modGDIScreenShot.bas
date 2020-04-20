@@ -4,6 +4,7 @@ Option Explicit
 '声明API函数
 Public Declare Function WindowFromPoint Lib "user32" (ByVal xPoint As Long, ByVal yPoint As Long) As Long
 Public Declare Function StretchBlt Lib "gdi32" (ByVal hDC As Long, ByVal X As Long, ByVal Y As Long, ByVal nWidth As Long, ByVal nHeight As Long, ByVal hSrcDC As Long, ByVal xSrc As Long, ByVal ySrc As Long, ByVal nSrcWidth As Long, ByVal nSrcHeight As Long, ByVal dwRop As Long) As Long
+Public Declare Function SetStretchBltMode Lib "gdi32" (ByVal hDC As Long, ByVal nStretchMode As Long) As Long
 Public Declare Function CreateCompatibleDC Lib "gdi32" (ByVal hDC As Long) As Long
 Public Declare Function CreateCompatibleBitmap Lib "gdi32" (ByVal hDC As Long, ByVal nWidth As Long, ByVal nHeight As Long) As Long
 Public Declare Function GetDeviceCaps Lib "gdi32" (ByVal hDC As Long, ByVal iCapabilitiy As Long) As Long
@@ -21,6 +22,13 @@ Public Declare Function GetWindowRect Lib "user32" (ByVal hwnd As Long, lpRect A
 Public Declare Function ReleaseDC Lib "user32" (ByVal hwnd As Long, ByVal hDC As Long) As Long
 Public Declare Function GetDesktopWindow Lib "user32" () As Long
 Public Declare Function OleCreatePictureIndirect Lib "olepro32.dll" (PicDesc As PicBmp, RefIID As Guid, ByVal fPictureOwnsHandle As Long, IPic As IPicture) As Long
+
+'StretchBlt() Modes => SetStretchBltMode
+Public Const BLACKONWHITE As Long = 1
+Public Const WHITEONBLACK As Long = 2
+Public Const COLORONCOLOR As Long = 3
+Public Const HALFTONE As Long = 4
+Public Const MAXSTRETCHBLTMODE As Long = 4
 
 Public Const SRCCOP = &HCC0020
 '自定义数据类型
@@ -164,7 +172,7 @@ Public Function CaptureWindow(ByVal hWndSrc As Long, ByVal Client As Boolean, By
     
     Exit Function
 Err7:
-    MsgBox "错误！" & vbCrLf & "错误代码：" & Err.Number & vbCrLf & "错误描述：" & Err.Description, vbCritical + vbOKOnly
+    MsgBox "错误！CaptureWindow" & vbCrLf & "错误代码：" & Err.Number & vbCrLf & "错误描述：" & Err.Description, vbCritical + vbOKOnly
 End Function
 
 '抓取整个屏幕的函数
